@@ -12,7 +12,7 @@ using fakePOSApi.Models;
 namespace fakePOSApi.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20241022162900_InitDB")]
+    [Migration("20241024162556_InitDB")]
     partial class InitDB
     {
         /// <inheritdoc />
@@ -21,9 +21,9 @@ namespace fakePOSApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("fakePOSApi.Models.Categoria", b =>
                 {
@@ -31,18 +31,19 @@ namespace fakePOSApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IDCategoria"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDCategoria"));
 
                     b.Property<string>("CodCategoria")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Descripcion")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IDCategoria");
 
                     b.HasIndex("CodCategoria")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[CodCategoria] IS NOT NULL");
 
                     b.ToTable("Categorias");
                 });
@@ -53,10 +54,10 @@ namespace fakePOSApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IDCompra"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDCompra"));
 
                     b.Property<string>("Factura")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly>("Fecha")
                         .HasColumnType("date");
@@ -65,10 +66,10 @@ namespace fakePOSApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("MetodoPago")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("TotalCompra")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.HasKey("IDCompra");
 
@@ -83,7 +84,7 @@ namespace fakePOSApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IDDetalleCompra"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDDetalleCompra"));
 
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
@@ -95,7 +96,7 @@ namespace fakePOSApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<double>("SubTotal")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.HasKey("IDDetalleCompra");
 
@@ -112,7 +113,7 @@ namespace fakePOSApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IDDetalleVenta"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDDetalleVenta"));
 
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
@@ -124,7 +125,7 @@ namespace fakePOSApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<double>("SubTotal")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.HasKey("IDDetalleVenta");
 
@@ -141,7 +142,7 @@ namespace fakePOSApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IDKardex"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDKardex"));
 
                     b.Property<int>("Entrada")
                         .HasColumnType("int");
@@ -156,13 +157,13 @@ namespace fakePOSApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NumDocumento")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Salida")
                         .HasColumnType("int");
 
                     b.Property<string>("TipoMovimiento")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IDKardex");
 
@@ -179,19 +180,19 @@ namespace fakePOSApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IDProducto"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDProducto"));
 
                     b.Property<string>("CodProducto")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Descripcion")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IDCategoria")
                         .HasColumnType("int");
 
                     b.Property<double>("Precio")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
@@ -199,7 +200,8 @@ namespace fakePOSApi.Migrations
                     b.HasKey("IDProducto");
 
                     b.HasIndex("CodProducto")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[CodProducto] IS NOT NULL");
 
                     b.HasIndex("IDCategoria");
 
@@ -212,27 +214,28 @@ namespace fakePOSApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IDUser"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDUser"));
 
                     b.Property<string>("CodUser")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsAdmin")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("Password")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IDUser");
 
                     b.HasIndex("CodUser")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[CodUser] IS NOT NULL");
 
                     b.ToTable("Usuarios");
                 });
@@ -243,10 +246,10 @@ namespace fakePOSApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IDVenta"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDVenta"));
 
                     b.Property<string>("Factura")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly>("Fecha")
                         .HasColumnType("date");
@@ -255,13 +258,13 @@ namespace fakePOSApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsContable")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("MetodoPago")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("TotalVenta")
-                        .HasColumnType("double");
+                        .HasColumnType("float");
 
                     b.HasKey("IDVenta");
 

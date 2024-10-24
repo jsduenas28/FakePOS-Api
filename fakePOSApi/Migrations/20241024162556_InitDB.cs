@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -12,59 +11,47 @@ namespace fakePOSApi.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "Categorias",
                 columns: table => new
                 {
                     IDCategoria = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CodCategoria = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Descripcion = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CodCategoria = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categorias", x => x.IDCategoria);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
                 {
                     IDUser = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CodUser = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsAdmin = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CodUser = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuarios", x => x.IDUser);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Productos",
                 columns: table => new
                 {
                     IDProducto = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CodProducto = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Descripcion = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CodProducto = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Stock = table.Column<int>(type: "int", nullable: false),
-                    Precio = table.Column<double>(type: "double", nullable: false),
+                    Precio = table.Column<double>(type: "float", nullable: false),
                     IDCategoria = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -76,21 +63,18 @@ namespace fakePOSApi.Migrations
                         principalTable: "Categorias",
                         principalColumn: "IDCategoria",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Compras",
                 columns: table => new
                 {
                     IDCompra = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Factura = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Factura = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fecha = table.Column<DateOnly>(type: "date", nullable: false),
-                    MetodoPago = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TotalCompra = table.Column<double>(type: "double", nullable: false),
+                    MetodoPago = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TotalCompra = table.Column<double>(type: "float", nullable: false),
                     IDUser = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -102,22 +86,19 @@ namespace fakePOSApi.Migrations
                         principalTable: "Usuarios",
                         principalColumn: "IDUser",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Ventas",
                 columns: table => new
                 {
                     IDVenta = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Factura = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Factura = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fecha = table.Column<DateOnly>(type: "date", nullable: false),
-                    MetodoPago = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TotalVenta = table.Column<double>(type: "double", nullable: false),
-                    IsContable = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    MetodoPago = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TotalVenta = table.Column<double>(type: "float", nullable: false),
+                    IsContable = table.Column<bool>(type: "bit", nullable: false),
                     IDUser = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -129,20 +110,17 @@ namespace fakePOSApi.Migrations
                         principalTable: "Usuarios",
                         principalColumn: "IDUser",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Kardex",
                 columns: table => new
                 {
                     IDKardex = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IDProducto = table.Column<int>(type: "int", nullable: false),
-                    NumDocumento = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TipoMovimiento = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NumDocumento = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TipoMovimiento = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Entrada = table.Column<int>(type: "int", nullable: false),
                     Salida = table.Column<int>(type: "int", nullable: false),
                     Fecha = table.Column<DateOnly>(type: "date", nullable: false),
@@ -163,19 +141,18 @@ namespace fakePOSApi.Migrations
                         principalTable: "Usuarios",
                         principalColumn: "IDUser",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "DetalleCompras",
                 columns: table => new
                 {
                     IDDetalleCompra = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IDCompra = table.Column<int>(type: "int", nullable: false),
                     IDProducto = table.Column<int>(type: "int", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
-                    SubTotal = table.Column<double>(type: "double", nullable: false)
+                    SubTotal = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -192,19 +169,18 @@ namespace fakePOSApi.Migrations
                         principalTable: "Productos",
                         principalColumn: "IDProducto",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "DetalleVentas",
                 columns: table => new
                 {
                     IDDetalleVenta = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IDVenta = table.Column<int>(type: "int", nullable: false),
                     IDProducto = table.Column<int>(type: "int", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
-                    SubTotal = table.Column<double>(type: "double", nullable: false)
+                    SubTotal = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -221,14 +197,14 @@ namespace fakePOSApi.Migrations
                         principalTable: "Ventas",
                         principalColumn: "IDVenta",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categorias_CodCategoria",
                 table: "Categorias",
                 column: "CodCategoria",
-                unique: true);
+                unique: true,
+                filter: "[CodCategoria] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Compras_IDUser",
@@ -269,7 +245,8 @@ namespace fakePOSApi.Migrations
                 name: "IX_Productos_CodProducto",
                 table: "Productos",
                 column: "CodProducto",
-                unique: true);
+                unique: true,
+                filter: "[CodProducto] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Productos_IDCategoria",
@@ -280,7 +257,8 @@ namespace fakePOSApi.Migrations
                 name: "IX_Usuarios_CodUser",
                 table: "Usuarios",
                 column: "CodUser",
-                unique: true);
+                unique: true,
+                filter: "[CodUser] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ventas_IDUser",

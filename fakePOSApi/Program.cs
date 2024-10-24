@@ -15,8 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 // EntityFramework
 builder.Services.AddDbContext<StoreContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString("StoreConnection"),
-        new MySqlServerVersion(new Version(8, 0, 2)));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection"));
 });
 
 // Repository
@@ -107,11 +106,22 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "FakePOS - API v1");
+    c.RoutePrefix = string.Empty;
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "FakePOS - API v1");
+        c.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();
