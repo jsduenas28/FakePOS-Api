@@ -74,7 +74,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     // Configuración para que Swagger acepte JWT
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FakePOS - API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { 
+        Title = "FakePOS - API",
+        Version = "v1",
+        Description = "Punto de Venta Falso (Fake Point Of Sale) desarrollado en ASP.NET Core 8.",
+        Contact = new OpenApiContact
+        {
+            Name = "Josué David Sánchez Dueñas",
+            Email = "josueduenas2805@gmail.com"
+        }
+    });
 
     // Configurar el esquema de seguridad para JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -110,7 +119,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "FakePOS - API v1");
-    c.RoutePrefix = string.Empty;
+    c.RoutePrefix = "swagger";
 });
 
 // Configure the HTTP request pipeline.
@@ -120,7 +129,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "FakePOS - API v1");
-        c.RoutePrefix = string.Empty;
+        c.RoutePrefix = "swagger";
     });
 }
 
