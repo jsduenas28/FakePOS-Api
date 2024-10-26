@@ -73,14 +73,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    // Configuración para que Swagger acepte JWT
+    // ConfiguraciÃ³n para que Swagger acepte JWT
     c.SwaggerDoc("v1", new OpenApiInfo { 
         Title = "FakePOS - API",
         Version = "v1",
         Description = "Punto de Venta Falso (Fake Point Of Sale) desarrollado en ASP.NET Core 8.",
         Contact = new OpenApiContact
         {
-            Name = "Josué David Sánchez Dueñas",
+            Name = "JosuÃ© David SÃ¡nchez DueÃ±as",
             Email = "josueduenas2805@gmail.com"
         }
     });
@@ -93,7 +93,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Introduzca solo el token JWT en el input."
+        Description = "Introduzca el token de la siguiente forma: Bearer {token}"
     });
 
     // Configurar que los endpoints protegidos requieran el token JWT
