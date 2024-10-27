@@ -41,7 +41,9 @@ namespace fakePOSApi.Services
                 UserName = dto.UserName,
                 Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
                 IsAdmin = dto.IsAdmin,
-                IsActive = true
+                IsActive = true,
+                CreateAt = DateTime.Now,
+                UpdateAt = DateTime.Now
             };
 
             await _authRepository.Register(user);

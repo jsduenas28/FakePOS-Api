@@ -22,7 +22,9 @@ namespace fakePOSApi.Services
             {
                 IDCategoria = c.IDCategoria,
                 CodCategoria = c.CodCategoria,
-                Descripcion = c.Descripcion
+                Descripcion = c.Descripcion,
+                CreateAt = c.CreateAt,
+                UpdateAt = c.UpdateAt
             });
         }
 
@@ -34,7 +36,9 @@ namespace fakePOSApi.Services
             {
                 IDCategoria = categoria.IDCategoria,
                 CodCategoria = categoria.CodCategoria,
-                Descripcion = categoria.Descripcion
+                Descripcion = categoria.Descripcion,
+                CreateAt = categoria.CreateAt,
+                UpdateAt = categoria.UpdateAt
             };
         }
 
@@ -46,7 +50,9 @@ namespace fakePOSApi.Services
             {
                 IDCategoria = c.IDCategoria,
                 CodCategoria = c.CodCategoria,
-                Descripcion = c.Descripcion
+                Descripcion = c.Descripcion,
+                CreateAt = c.CreateAt,
+                UpdateAt = c.UpdateAt
             });
         }
 
@@ -55,7 +61,9 @@ namespace fakePOSApi.Services
             var categoria = new Categoria()
             {
                 CodCategoria = dto.CodCategoria,
-                Descripcion = dto.Descripcion
+                Descripcion = dto.Descripcion,
+                CreateAt = DateTime.Now,
+                UpdateAt = DateTime.Now
             };
 
             await _repository.Add(categoria);
@@ -65,7 +73,9 @@ namespace fakePOSApi.Services
             {
                 IDCategoria = categoria.IDCategoria,
                 CodCategoria = categoria.CodCategoria,
-                Descripcion = categoria.Descripcion
+                Descripcion = categoria.Descripcion,
+                CreateAt = categoria.CreateAt,
+                UpdateAt = categoria.UpdateAt
             };
         }
 
@@ -74,6 +84,7 @@ namespace fakePOSApi.Services
             var categoria = await _repository.GetByID(id);
 
             categoria.Descripcion = dto.Descripcion;
+            categoria.UpdateAt = DateTime.Now;
             _repository.Update(categoria);
             await _repository.Save();
 
@@ -81,7 +92,9 @@ namespace fakePOSApi.Services
             {
                 IDCategoria = categoria.IDCategoria,
                 CodCategoria = categoria.CodCategoria,
-                Descripcion = categoria.Descripcion
+                Descripcion = categoria.Descripcion,
+                CreateAt = categoria.CreateAt,
+                UpdateAt = categoria.UpdateAt
             };
         }
 
@@ -93,7 +106,9 @@ namespace fakePOSApi.Services
             {
                 IDCategoria = categoria.IDCategoria,
                 CodCategoria = categoria.CodCategoria,
-                Descripcion = categoria.Descripcion
+                Descripcion = categoria.Descripcion,
+                CreateAt = categoria.CreateAt,
+                UpdateAt = categoria.UpdateAt
             };
 
             _repository.Delete(categoria);

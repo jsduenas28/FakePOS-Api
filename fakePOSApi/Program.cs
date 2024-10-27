@@ -93,7 +93,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Introduzca solo el token JWT en el input."
+        Description = "Introduzca el token de la siguiente forma: Bearer {token}"
     });
 
     // Configurar que los endpoints protegidos requieran el token JWT

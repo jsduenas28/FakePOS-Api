@@ -12,6 +12,8 @@ namespace fakePOSApi.Models
         public string Descripcion { get; set; }
         public int Stock { get; set; }
         public double Precio { get; set; }
+        public DateTime CreateAt { get; set; }
+        public DateTime UpdateAt { get; set; }
         public int IDCategoria { get; set; }
 
         [ForeignKey("IDCategoria")]

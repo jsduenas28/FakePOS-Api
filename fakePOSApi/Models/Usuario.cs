@@ -13,5 +13,7 @@ namespace fakePOSApi.Models
         public string Password { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsActive { get; set; }
+        public DateTime CreateAt { get; set; }
+        public DateTime UpdateAt { get; set; }
     }
 }
