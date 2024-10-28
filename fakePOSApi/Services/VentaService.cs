@@ -6,16 +6,16 @@ namespace fakePOSApi.Services
 {
     public class VentaService : IVentaService
     {
-        private IRepository<Venta> _ventaRepository;
-        private IDetalleRepository<DetalleVentaDto, DetalleVenta> _detalleVentaRepository;
+        private IFacturaRepository<VentaDto, Venta> _ventaRepository;
+        private IDetalleRepository<DetalleVenta> _detalleVentaRepository;
         private IProductoRepository<Producto> _productoRepository;
         private IKardexRepository<Kardex> _kardexRepository;
         private IUsuarioRepository<Usuario> _usuarioRepository;
         private IHttpContextAccessor _httpContext;
         public List<string> Message { get; private set; } = new List<string>();
 
-        public VentaService([FromKeyedServices("ventaRepository")] IRepository<Venta> ventaRepository, 
-                            [FromKeyedServices("detalleVentaRepository")] IDetalleRepository<DetalleVentaDto, DetalleVenta> detalleVentaRepository, 
+        public VentaService([FromKeyedServices("ventaRepository")] IFacturaRepository<VentaDto, Venta> ventaRepository, 
+                            [FromKeyedServices("detalleVentaRepository")] IDetalleRepository<DetalleVenta> detalleVentaRepository, 
                             IProductoRepository<Producto> productoRepository,
                             IKardexRepository<Kardex> kardexRepository,
                             IUsuarioRepository<Usuario> usuarioRepository,
@@ -31,58 +31,14 @@ namespace fakePOSApi.Services
 
         public async Task<IEnumerable<VentaDto>> Get()
         {
-            var venta = await _ventaRepository.Get();
-            var usuario = await _usuarioRepository.Get();
-            var detalleVenta = await _detalleVentaRepository.GetDetalleWithProducto();
-
-            return venta.Select(v => new VentaDto
-            {
-                IDVenta = v.IDVenta,
-                Factura = v.Factura,
-                Fecha = v.Fecha,
-                MetodoPago = v.MetodoPago,
-                TotalVenta = v.TotalVenta,
-                IsContable = v.IsContable,
-                Usuario = usuario.Where(u => u.IDUser == v.IDUser).Select(u => new UsuarioDto
-                {
-                    IDUser = u.IDUser,
-                    CodUser = u.CodUser,
-                    UserName = u.UserName,
-                    IsAdmin = u.IsAdmin,
-                    IsActive = u.IsActive,
-                    CreateAt = u.CreateAt,
-                    UpdateAt = u.UpdateAt
-                }).FirstOrDefault(),
-                DetalleVenta = detalleVenta.ToList()
-            });
+            var venta = await _ventaRepository.GetViewFactura();
+            return venta;
         }
 
         public async Task<VentaDto> GetByID(int id)
         {
-            var venta = await _ventaRepository.GetByID(id);
-            var usuario = await _usuarioRepository.GetByID(venta.IDUser);
-            var detalleVenta = await _detalleVentaRepository.GetDetalleWithProductoByID(id);
-
-            return new VentaDto
-            {
-                IDVenta = venta.IDVenta,
-                Factura = venta.Factura,
-                Fecha = venta.Fecha,
-                MetodoPago = venta.MetodoPago,
-                TotalVenta = venta.TotalVenta,
-                IsContable = venta.IsContable,
-                Usuario = new UsuarioDto
-                {
-                    IDUser = usuario.IDUser,
-                    CodUser = usuario.CodUser,
-                    UserName = usuario.UserName,
-                    IsAdmin = usuario.IsAdmin,
-                    IsActive = usuario.IsActive,
-                    CreateAt = usuario.CreateAt,
-                    UpdateAt = usuario.UpdateAt
-                },
-                DetalleVenta = detalleVenta.ToList()
-            };
+            var venta = await _ventaRepository.GetViewFacturaByID(id);
+            return venta;
         }
 
         public async Task<VentaDto> Add(VentaInsertDto dto)
@@ -139,29 +95,8 @@ namespace fakePOSApi.Services
             await _detalleVentaRepository.Save();
             await _kardexRepository.Save();
 
-            var usuario = await _usuarioRepository.GetByID(venta.IDUser);
-            var detalleVentDto = await _detalleVentaRepository.GetDetalleWithProductoByID(venta.IDVenta);
-
-            return new VentaDto
-            {
-                IDVenta = venta.IDVenta,
-                Factura = venta.Factura,
-                Fecha = venta.Fecha,
-                MetodoPago = venta.MetodoPago,
-                TotalVenta = venta.TotalVenta,
-                IsContable = venta.IsContable,
-                Usuario = new UsuarioDto
-                {
-                    IDUser = usuario.IDUser,
-                    CodUser = usuario.CodUser,
-                    UserName = usuario.UserName,
-                    IsAdmin = usuario.IsAdmin,
-                    IsActive = usuario.IsActive,
-                    CreateAt = usuario.CreateAt,
-                    UpdateAt = usuario.UpdateAt
-                },
-                DetalleVenta = detalleVentDto.ToList()
-            };
+            var ventaDto = await _ventaRepository.GetViewFacturaByID(venta.IDVenta);
+            return ventaDto;
         }
 
         public async Task<VentaDto> Update(int id, VentaUpdateDto dto)
@@ -175,57 +110,14 @@ namespace fakePOSApi.Services
             _ventaRepository.Update(venta);
             await _ventaRepository.Save();
 
-            var usuario = await _usuarioRepository.GetByID(venta.IDUser);
-            var detalleVentDto = await _detalleVentaRepository.GetDetalleWithProductoByID(venta.IDVenta);
-
-            return new VentaDto
-            {
-                IDVenta = venta.IDVenta,
-                Factura = venta.Factura,
-                Fecha = venta.Fecha,
-                MetodoPago = venta.MetodoPago,
-                TotalVenta = venta.TotalVenta,
-                IsContable = venta.IsContable,
-                Usuario = new UsuarioDto
-                {
-                    IDUser = usuario.IDUser,
-                    CodUser = usuario.CodUser,
-                    UserName = usuario.UserName,
-                    IsAdmin = usuario.IsAdmin,
-                    IsActive = usuario.IsActive,
-                    CreateAt = usuario.CreateAt,
-                    UpdateAt = usuario.UpdateAt
-                },
-                DetalleVenta = detalleVentDto.ToList()
-            };
+            var ventaDto = await _ventaRepository.GetViewFacturaByID(venta.IDVenta);
+            return ventaDto;
         }
 
         public async Task<VentaDto> Delete(int id)
         {
             var venta = await _ventaRepository.GetByID(id);
-            var usuario = await _usuarioRepository.GetByID(venta.IDUser);
-            var detalleVentDto = await _detalleVentaRepository.GetDetalleWithProductoByID(venta.IDVenta);
-
-            var ventaDto = new VentaDto
-            {
-                IDVenta = venta.IDVenta,
-                Factura = venta.Factura,
-                Fecha = venta.Fecha,
-                MetodoPago = venta.MetodoPago,
-                TotalVenta = venta.TotalVenta,
-                IsContable = venta.IsContable,
-                Usuario = new UsuarioDto
-                {
-                    IDUser = usuario.IDUser,
-                    CodUser = usuario.CodUser,
-                    UserName = usuario.UserName,
-                    IsAdmin = usuario.IsAdmin,
-                    IsActive = usuario.IsActive,
-                    CreateAt = usuario.CreateAt,
-                    UpdateAt = usuario.UpdateAt
-                },
-                DetalleVenta = detalleVentDto.ToList()
-            };
+            var ventaDto = await _ventaRepository.GetViewFacturaByID(venta.IDVenta);
 
             _ventaRepository.Delete(venta);
             await _ventaRepository.Save();
