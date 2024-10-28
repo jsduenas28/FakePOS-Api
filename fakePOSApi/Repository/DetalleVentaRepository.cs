@@ -1,9 +1,10 @@
-﻿using fakePOSApi.Models;
+﻿using fakePOSApi.DTOs;
+using fakePOSApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace fakePOSApi.Repository
 {
-    public class DetalleVentaRepository : IDetalleRepository<DetalleVenta>
+    public class DetalleVentaRepository : IDetalleRepository<DetalleVentaDto, DetalleVenta>
     {
         private StoreContext _context;
 
@@ -39,6 +40,83 @@ namespace fakePOSApi.Repository
         public Task<IEnumerable<DetalleVenta>> Search(string search)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<DetalleVentaDto>> GetDetalleWithProducto()
+        {
+            var result = await (
+                    from detalleventas in _context.DetalleVentas
+                    join productos in _context.Productos
+                    on detalleventas.IDProducto equals productos.IDProducto
+                    join categorias in _context.Categorias
+                    on productos.IDCategoria equals categorias.IDCategoria
+                    select new DetalleVentaDto
+                    {
+                        IDDetalleVenta = detalleventas.IDDetalleVenta,
+                        IDVenta = detalleventas.IDVenta,
+                        Cantidad = detalleventas.Cantidad,
+                        SubTotal = detalleventas.SubTotal,
+                        Producto = new ProductoDto
+                        {
+                            IDProducto = productos.IDProducto,
+                            CodProducto = productos.CodProducto,
+                            Descripcion = productos.Descripcion,
+                            Stock = productos.Stock,
+                            Precio = productos.Precio,
+                            CreateAt = productos.CreateAt,
+                            UpdateAt = productos.UpdateAt,
+                            Categoria = new CategoriaDto
+                            {
+                                IDCategoria = categorias.IDCategoria,
+                                CodCategoria = categorias.CodCategoria,
+                                Descripcion = categorias.Descripcion,
+                                CreateAt = categorias.CreateAt,
+                                UpdateAt = categorias.UpdateAt
+                            }
+                        }
+                    }
+                ).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<DetalleVentaDto>> GetDetalleWithProductoByID(int id)
+        {
+            var result = await(
+                    from detalleventas in _context.DetalleVentas
+                    join productos in _context.Productos
+                    on detalleventas.IDProducto equals productos.IDProducto
+                    join categorias in _context.Categorias
+                    on productos.IDCategoria equals categorias.IDCategoria
+                    where detalleventas.IDVenta == id
+                    select new DetalleVentaDto
+                    {
+                        IDDetalleVenta = detalleventas.IDDetalleVenta,
+                        IDVenta = detalleventas.IDVenta,
+                        Cantidad = detalleventas.Cantidad,
+                        SubTotal = detalleventas.SubTotal,
+                        Producto = new ProductoDto
+                        {
+                            IDProducto = productos.IDProducto,
+                            CodProducto = productos.CodProducto,
+                            Descripcion = productos.Descripcion,
+                            Stock = productos.Stock,
+                            Precio = productos.Precio,
+                            CreateAt = productos.CreateAt,
+                            UpdateAt = productos.UpdateAt,
+                            Categoria = new CategoriaDto
+                            {
+                                IDCategoria = categorias.IDCategoria,
+                                CodCategoria = categorias.CodCategoria,
+                                Descripcion = categorias.Descripcion,
+                                CreateAt = categorias.CreateAt,
+                                UpdateAt = categorias.UpdateAt
+                            }
+                        }
+                    }
+                ).ToListAsync();
+
+            return result;
         }
     }
 }

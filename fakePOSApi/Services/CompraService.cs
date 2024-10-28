@@ -7,14 +7,14 @@ namespace fakePOSApi.Services
     public class CompraService : IService<CompraDto, CompraInsertDto, CompraUpdateDto>
     {
         private IRepository<Compra> _compraRepository;
-        private IDetalleRepository<DetalleCompra> _detalleCompraRepository;
+        private IDetalleRepository<DetalleCompraDto, DetalleCompra> _detalleCompraRepository;
         private IProductoRepository<Producto> _productoRepository;
         private IKardexRepository<Kardex> _kardexRepository;
         private IHttpContextAccessor _httpContext;
         public List<string> Message { get; private set; } = new List<string>();
 
         public CompraService([FromKeyedServices("compraRepository")] IRepository<Compra> compraRepository, 
-                             [FromKeyedServices("detalleCompraRepository")] IDetalleRepository<DetalleCompra> detalleCompraRepository, 
+                             [FromKeyedServices("detalleCompraRepository")] IDetalleRepository<DetalleCompraDto, DetalleCompra> detalleCompraRepository, 
                              IProductoRepository<Producto> productoRepository, 
                              IKardexRepository<Kardex> kardexRepository,
                              IHttpContextAccessor httpContext)

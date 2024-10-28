@@ -7,5 +7,6 @@
         public int IDProducto { get; set; }
         public int Cantidad { get; set; }
         public double SubTotal { get; set; }
+        public ProductoDto Producto { get; set; }
     }
 }

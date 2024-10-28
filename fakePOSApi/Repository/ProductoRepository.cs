@@ -13,6 +13,9 @@ namespace fakePOSApi.Repository
             _context = context;
         }
 
+        public async Task<Producto> GetByID(int id)
+            => await _context.Productos.FindAsync(id);
+
         public async Task<Producto> GetByCodProducto(string CodProducto)
             => await _context.Productos.Where(p => p.CodProducto == CodProducto).FirstOrDefaultAsync();
 
@@ -146,11 +149,6 @@ namespace fakePOSApi.Repository
         }
 
         public Task<IEnumerable<Producto>> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Producto> GetByID(int id)
         {
             throw new NotImplementedException();
         }

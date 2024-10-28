@@ -23,9 +23,9 @@ builder.Services.AddScoped<IAuthRepository<Usuario>, AuthRepository>();
 builder.Services.AddKeyedScoped<IRepository<Categoria>, CategoriaRepository>("categoriaRepository");
 builder.Services.AddScoped<IProductoRepository<Producto>, ProductoRepository>();
 builder.Services.AddKeyedScoped<IRepository<Venta>, VentaRepository>("ventaRepository");
-builder.Services.AddKeyedScoped<IDetalleRepository<DetalleVenta>, DetalleVentaRepository>("detalleVentaRepository");
+builder.Services.AddKeyedScoped<IDetalleRepository<DetalleVentaDto, DetalleVenta>, DetalleVentaRepository>("detalleVentaRepository");
 builder.Services.AddKeyedScoped<IRepository<Compra>, CompraRepository>("compraRepository");
-builder.Services.AddKeyedScoped<IDetalleRepository<DetalleCompra>, DetalleCompraRepository>("detalleCompraRepository");
+builder.Services.AddKeyedScoped<IDetalleRepository<DetalleCompraDto, DetalleCompra>, DetalleCompraRepository>("detalleCompraRepository");
 builder.Services.AddScoped<IKardexRepository<Kardex>, KardexRepository>();
 builder.Services.AddScoped<IUsuarioRepository<Usuario>, UsuarioRepository>();
 

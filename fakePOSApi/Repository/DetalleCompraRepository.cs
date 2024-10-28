@@ -1,9 +1,10 @@
-﻿using fakePOSApi.Models;
+﻿using fakePOSApi.DTOs;
+using fakePOSApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace fakePOSApi.Repository
 {
-    public class DetalleCompraRepository : IDetalleRepository<DetalleCompra>
+    public class DetalleCompraRepository : IDetalleRepository<DetalleCompraDto, DetalleCompra>
     {
         private StoreContext _context;
 
@@ -37,6 +38,16 @@ namespace fakePOSApi.Repository
             => await _context.SaveChangesAsync();
 
         public Task<IEnumerable<DetalleCompra>> Search(string search)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<DetalleCompraDto>> GetDetalleWithProducto()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<DetalleCompraDto>> GetDetalleWithProductoByID(int id)
         {
             throw new NotImplementedException();
         }
