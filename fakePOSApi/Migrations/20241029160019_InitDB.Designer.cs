@@ -12,8 +12,8 @@ using fakePOSApi.Models;
 namespace fakePOSApi.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20241027190827_Add-New-Columns")]
-    partial class AddNewColumns
+    [Migration("20241029160019_InitDB")]
+    partial class InitDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
