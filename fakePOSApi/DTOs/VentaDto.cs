@@ -8,7 +8,7 @@
         public string MetodoPago { get; set; }
         public double TotalVenta { get; set; }
         public bool IsContable { get; set; }
-        public int IDUser { get; set; }
+        public UsuarioDto Usuario { get; set; }
         public List<DetalleVentaDto> DetalleVenta { get; set; }
     }
 }

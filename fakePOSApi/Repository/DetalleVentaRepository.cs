@@ -1,4 +1,5 @@
-﻿using fakePOSApi.Models;
+﻿using fakePOSApi.DTOs;
+using fakePOSApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace fakePOSApi.Repository

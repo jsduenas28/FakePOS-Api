@@ -22,9 +22,9 @@ builder.Services.AddDbContext<StoreContext>(options =>
 builder.Services.AddScoped<IAuthRepository<Usuario>, AuthRepository>();
 builder.Services.AddKeyedScoped<IRepository<Categoria>, CategoriaRepository>("categoriaRepository");
 builder.Services.AddScoped<IProductoRepository<Producto>, ProductoRepository>();
-builder.Services.AddKeyedScoped<IRepository<Venta>, VentaRepository>("ventaRepository");
+builder.Services.AddKeyedScoped<IFacturaRepository<VentaDto, Venta>, VentaRepository>("ventaRepository");
 builder.Services.AddKeyedScoped<IDetalleRepository<DetalleVenta>, DetalleVentaRepository>("detalleVentaRepository");
-builder.Services.AddKeyedScoped<IRepository<Compra>, CompraRepository>("compraRepository");
+builder.Services.AddKeyedScoped<IFacturaRepository<CompraDto, Compra>, CompraRepository>("compraRepository");
 builder.Services.AddKeyedScoped<IDetalleRepository<DetalleCompra>, DetalleCompraRepository>("detalleCompraRepository");
 builder.Services.AddScoped<IKardexRepository<Kardex>, KardexRepository>();
 builder.Services.AddScoped<IUsuarioRepository<Usuario>, UsuarioRepository>();

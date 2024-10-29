@@ -19,47 +19,20 @@ namespace fakePOSApi.Services
 
         public async Task<IEnumerable<ProductoDto>> Get()
         {
-            var productos = await _productoRepository.Get();
-
-            return productos.Select(p => new ProductoDto
-            {
-                IDProducto = p.IDProducto,
-                CodProducto = p.CodProducto,
-                Descripcion = p.Descripcion,
-                Stock = p.Stock,
-                Precio = p.Precio,
-                IDCategoria = p.IDCategoria
-            });
+            var productos = await _productoRepository.GetProductosConCategoria();
+            return productos;
         }
 
         public async Task<ProductoDto> GetByID(int id)
         {
-            var producto = await _productoRepository.GetByID(id);
-
-            return new ProductoDto
-            {
-                IDProducto = producto.IDProducto,
-                CodProducto = producto.CodProducto,
-                Descripcion = producto.Descripcion,
-                Stock = producto.Stock,
-                Precio = producto.Precio,
-                IDCategoria = producto.IDCategoria
-            };
+            var producto = await _productoRepository.GetProductoConCategoriaByID(id);
+            return producto;
         }
 
         public async Task<IEnumerable<ProductoDto>> Search(string search)
         {
-            var productos = await _productoRepository.Search(search);
-
-            return productos.Select(p => new ProductoDto
-            {
-                IDProducto = p.IDProducto,
-                CodProducto = p.CodProducto,
-                Descripcion = p.Descripcion,
-                Stock = p.Stock,
-                Precio = p.Precio,
-                IDCategoria = p.IDCategoria
-            });
+            var produtos = await _productoRepository.GetProductosConCategoriaByCodProducto(search);
+            return produtos;
         }
 
         public async Task<ProductoDto> Add(ProductoInsertDto dto)
@@ -70,11 +43,15 @@ namespace fakePOSApi.Services
                 Descripcion = dto.Descripcion,
                 Stock = 0,
                 Precio = dto.Precio,
+                CreateAt = DateTime.Now,
+                UpdateAt = DateTime.Now,
                 IDCategoria = dto.IDCategoria
             };
 
             await _productoRepository.Add(producto);
             await _productoRepository.Save();
+
+            var categoria = await _categoriaRepository.GetByID(producto.IDCategoria);
 
             return new ProductoDto
             {
@@ -83,7 +60,16 @@ namespace fakePOSApi.Services
                 Descripcion = producto.Descripcion,
                 Stock = producto.Stock,
                 Precio = producto.Precio,
-                IDCategoria = producto.IDCategoria
+                CreateAt = producto.CreateAt,
+                UpdateAt = producto.UpdateAt,
+                Categoria = new CategoriaDto
+                {
+                    IDCategoria = categoria.IDCategoria,
+                    CodCategoria = categoria.CodCategoria,
+                    Descripcion = categoria.Descripcion,
+                    CreateAt = categoria.CreateAt,
+                    UpdateAt = categoria.UpdateAt
+                }
             };
         }
 
@@ -93,9 +79,12 @@ namespace fakePOSApi.Services
 
             producto.Descripcion = dto.Descripcion;
             producto.Precio = dto.Precio;
+            producto.UpdateAt = DateTime.Now;
 
             _productoRepository.Update(producto);
             await _productoRepository.Save();
+
+            var categoria = await _categoriaRepository.GetByID(producto.IDCategoria);
 
             return new ProductoDto
             {
@@ -104,7 +93,16 @@ namespace fakePOSApi.Services
                 Descripcion = producto.Descripcion,
                 Stock = producto.Stock,
                 Precio = producto.Precio,
-                IDCategoria = producto.IDCategoria
+                CreateAt = producto.CreateAt,
+                UpdateAt = producto.UpdateAt,
+                Categoria = new CategoriaDto
+                {
+                    IDCategoria = categoria.IDCategoria,
+                    CodCategoria = categoria.CodCategoria,
+                    Descripcion = categoria.Descripcion,
+                    CreateAt = categoria.CreateAt,
+                    UpdateAt = categoria.UpdateAt
+                }
             };
         }
 
@@ -112,14 +110,25 @@ namespace fakePOSApi.Services
         {
             var producto = await _productoRepository.GetByID(id);
 
-            var productoDto =  new ProductoDto
+            var categoria = await _categoriaRepository.GetByID(producto.IDCategoria);
+
+            var productoDto = new ProductoDto
             {
                 IDProducto = producto.IDProducto,
                 CodProducto = producto.CodProducto,
                 Descripcion = producto.Descripcion,
                 Stock = producto.Stock,
                 Precio = producto.Precio,
-                IDCategoria = producto.IDCategoria
+                CreateAt = producto.CreateAt,
+                UpdateAt = producto.UpdateAt,
+                Categoria = new CategoriaDto
+                {
+                    IDCategoria = categoria.IDCategoria,
+                    CodCategoria = categoria.CodCategoria,
+                    Descripcion = categoria.Descripcion,
+                    CreateAt = categoria.CreateAt,
+                    UpdateAt = categoria.UpdateAt
+                }
             };
 
             _productoRepository.Delete(producto);

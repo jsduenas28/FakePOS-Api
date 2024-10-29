@@ -1,4 +1,5 @@
-﻿using fakePOSApi.Models;
+﻿using fakePOSApi.DTOs;
+using fakePOSApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace fakePOSApi.Repository
@@ -12,14 +13,8 @@ namespace fakePOSApi.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<Producto>> Get()
-            => await _context.Productos.ToListAsync();
-
         public async Task<Producto> GetByID(int id)
             => await _context.Productos.FindAsync(id);
-
-        public async Task<IEnumerable<Producto>> Search(string search)
-            => await _context.Productos.Where(p => p.CodProducto.Contains(search)).ToListAsync();
 
         public async Task<Producto> GetByCodProducto(string CodProducto)
             => await _context.Productos.Where(p => p.CodProducto == CodProducto).FirstOrDefaultAsync();
@@ -62,6 +57,105 @@ namespace fakePOSApi.Repository
                 var producto = await _context.Productos.FirstOrDefaultAsync(p => p.IDProducto == idProducto);
                 producto.Stock += cantidad;
             }
+        }
+
+        public async Task<IEnumerable<ProductoDto>> GetProductosConCategoria()
+        {
+            var result = await (
+                    from productos in _context.Productos
+                    join categorias in _context.Categorias
+                    on productos.IDCategoria equals categorias.IDCategoria
+                    select new ProductoDto
+                    {
+                        IDProducto = productos.IDProducto,
+                        CodProducto = productos.CodProducto,
+                        Descripcion = productos.Descripcion,
+                        Stock = productos.Stock,
+                        Precio = productos.Precio,
+                        CreateAt = productos.CreateAt,
+                        UpdateAt = productos.UpdateAt,
+                        Categoria = new CategoriaDto
+                        {
+                            IDCategoria = categorias.IDCategoria,
+                            CodCategoria = categorias.CodCategoria,
+                            Descripcion = categorias.Descripcion,
+                            CreateAt = categorias.CreateAt,
+                            UpdateAt = categorias.UpdateAt
+                        }
+                    }
+                ).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<ProductoDto>> GetProductosConCategoriaByCodProducto(string CodProducto)
+        {
+            var result = await(
+                    from productos in _context.Productos
+                    join categorias in _context.Categorias
+                    on productos.IDCategoria equals categorias.IDCategoria
+                    where productos.CodProducto.Contains(CodProducto)
+                    select new ProductoDto
+                    {
+                        IDProducto = productos.IDProducto,
+                        CodProducto = productos.CodProducto,
+                        Descripcion = productos.Descripcion,
+                        Stock = productos.Stock,
+                        Precio = productos.Precio,
+                        CreateAt = productos.CreateAt,
+                        UpdateAt = productos.UpdateAt,
+                        Categoria = new CategoriaDto
+                        {
+                            IDCategoria = categorias.IDCategoria,
+                            CodCategoria = categorias.CodCategoria,
+                            Descripcion = categorias.Descripcion,
+                            CreateAt = categorias.CreateAt,
+                            UpdateAt = categorias.UpdateAt
+                        }
+                    }
+                ).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<ProductoDto> GetProductoConCategoriaByID(int id)
+        {
+            var result = await(
+                    from producto in _context.Productos
+                    join categoria in _context.Categorias
+                    on producto.IDCategoria equals categoria.IDCategoria
+                    where producto.IDCategoria == id
+                    select new ProductoDto
+                    {
+                        IDProducto = producto.IDProducto,
+                        CodProducto = producto.CodProducto,
+                        Descripcion = producto.Descripcion,
+                        Stock = producto.Stock,
+                        Precio = producto.Precio,
+                        CreateAt = producto.CreateAt,
+                        UpdateAt = producto.UpdateAt,
+                        Categoria = new CategoriaDto
+                        {
+                            IDCategoria = categoria.IDCategoria,
+                            CodCategoria = categoria.CodCategoria,
+                            Descripcion = categoria.Descripcion,
+                            CreateAt = categoria.CreateAt,
+                            UpdateAt = categoria.UpdateAt
+                        }
+                    }
+                ).FirstOrDefaultAsync();
+
+            return result;
+        }
+
+        public Task<IEnumerable<Producto>> Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Producto>> Search(string search)
+        {
+            throw new NotImplementedException();
         }
     }
 }

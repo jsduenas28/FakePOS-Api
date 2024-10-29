@@ -24,7 +24,9 @@ namespace fakePOSApi.Services
                 CodUser = u.CodUser,
                 UserName = u.UserName,
                 IsAdmin = u.IsAdmin,
-                IsActive = u.IsActive
+                IsActive = u.IsActive,
+                CreateAt = u.CreateAt,
+                UpdateAt = u.UpdateAt
             });
         }
 
@@ -38,7 +40,9 @@ namespace fakePOSApi.Services
                 CodUser = usuario.CodUser,
                 UserName = usuario.UserName,
                 IsAdmin = usuario.IsAdmin,
-                IsActive = usuario.IsActive
+                IsActive = usuario.IsActive,
+                CreateAt = usuario.CreateAt,
+                UpdateAt = usuario.UpdateAt
             };
         }
 
@@ -52,7 +56,9 @@ namespace fakePOSApi.Services
                 CodUser = u.CodUser,
                 UserName = u.UserName,
                 IsAdmin = u.IsAdmin,
-                IsActive = u.IsActive
+                IsActive = u.IsActive,
+                CreateAt = u.CreateAt,
+                UpdateAt = u.UpdateAt
             });
         }
 
@@ -61,6 +67,7 @@ namespace fakePOSApi.Services
             var usuario = await _repository.GetByID(id);
 
             usuario.UserName = dto.UserName;
+            usuario.UpdateAt = DateTime.Now;
             _repository.Update(usuario);
             await _repository.Save();
 
@@ -70,7 +77,9 @@ namespace fakePOSApi.Services
                 CodUser = usuario.CodUser,
                 UserName = usuario.UserName,
                 IsAdmin = usuario.IsAdmin,
-                IsActive = usuario.IsActive
+                IsActive = usuario.IsActive,
+                CreateAt = usuario.CreateAt,
+                UpdateAt = usuario.UpdateAt
             };
         }
 

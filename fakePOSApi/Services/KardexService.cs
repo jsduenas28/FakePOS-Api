@@ -18,7 +18,7 @@ namespace fakePOSApi.Services
 
         public async Task<KardexListDto> GetByID(int id)
         {
-            var kardex = await _kardexRepository.GetByID(id);
+            var kardex = await _kardexRepository.GetKardexWithUsuario(id);
             var producto = await _productoRepository.GetByID(id);
             int auxTotalEntradas = 0;
             int auxTotalSalidas = 0;
@@ -36,24 +36,14 @@ namespace fakePOSApi.Services
                 TotalEntradas = auxTotalEntradas,
                 TotalSalidas = auxTotalSalidas,
                 StockActual = producto.Stock,
-                Kardex = kardex.Select(k => new KardexDto
-                {
-                    IDKardex = k.IDKardex,
-                    IDProducto = k.IDProducto,
-                    NumDocumento = k.NumDocumento,
-                    TipoMovimiento = k.TipoMovimiento,
-                    Entrada = k.Entrada,
-                    Salida = k.Salida,
-                    Fecha = k.Fecha,
-                    IDUser = k.IDUser
-                }).ToList()
+                Kardex = kardex.ToList()
             };
         }
 
         public async Task<KardexListDto> GetByCodProducto(string CodProducto)
         {
             var producto = await _productoRepository.GetByCodProducto(CodProducto);
-            var kardex = await _kardexRepository.GetByID(producto.IDProducto);
+            var kardex = await _kardexRepository.GetKardexWithUsuario(producto.IDProducto);
             int auxTotalEntradas = 0;
             int auxTotalSalidas = 0;
 
@@ -70,17 +60,7 @@ namespace fakePOSApi.Services
                 TotalEntradas = auxTotalEntradas,
                 TotalSalidas = auxTotalSalidas,
                 StockActual = producto.Stock,
-                Kardex = kardex.Select(k => new KardexDto
-                {
-                    IDKardex = k.IDKardex,
-                    IDProducto = k.IDProducto,
-                    NumDocumento = k.NumDocumento,
-                    TipoMovimiento = k.TipoMovimiento,
-                    Entrada = k.Entrada,
-                    Salida = k.Salida,
-                    Fecha = k.Fecha,
-                    IDUser = k.IDUser
-                }).ToList()
+                Kardex = kardex.ToList()
             };
         }
 
