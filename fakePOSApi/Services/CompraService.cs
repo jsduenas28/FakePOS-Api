@@ -6,14 +6,14 @@ namespace fakePOSApi.Services
 {
     public class CompraService : IService<CompraDto, CompraInsertDto, CompraUpdateDto>
     {
-        private IRepository<Compra> _compraRepository;
+        private IFacturaRepository<CompraDto, Compra> _compraRepository;
         private IDetalleRepository<DetalleCompra> _detalleCompraRepository;
         private IProductoRepository<Producto> _productoRepository;
         private IKardexRepository<Kardex> _kardexRepository;
         private IHttpContextAccessor _httpContext;
         public List<string> Message { get; private set; } = new List<string>();
 
-        public CompraService([FromKeyedServices("compraRepository")] IRepository<Compra> compraRepository, 
+        public CompraService([FromKeyedServices("compraRepository")] IFacturaRepository<CompraDto, Compra> compraRepository, 
                              [FromKeyedServices("detalleCompraRepository")] IDetalleRepository<DetalleCompra> detalleCompraRepository, 
                              IProductoRepository<Producto> productoRepository, 
                              IKardexRepository<Kardex> kardexRepository,
@@ -28,50 +28,14 @@ namespace fakePOSApi.Services
 
         public async Task<IEnumerable<CompraDto>> Get()
         {
-            var compra = await _compraRepository.Get();
-            var detalleCompra = await _detalleCompraRepository.Get();
-
-            return compra.Select(c => new CompraDto
-            {
-                IDCompra = c.IDCompra,
-                Factura = c.Factura,
-                Fecha = c.Fecha,
-                MetodoPago = c.MetodoPago,
-                TotalCompra = c.TotalCompra,
-                IDUser = c.IDUser,
-                DetalleCompra = detalleCompra.Where(dt => dt.IDCompra == c.IDCompra).Select(dt => new DetalleCompraDto
-                {
-                    IDDetalleCompra = dt.IDDetalleCompra,
-                    IDCompra = dt.IDCompra,
-                    IDProducto = dt.IDProducto,
-                    Cantidad = dt.Cantidad,
-                    SubTotal = dt.SubTotal
-                }).ToList()
-            });
+            var compra = await _compraRepository.GetViewFactura();
+            return compra;
         }
 
         public async Task<CompraDto> GetByID(int id)
         {
-            var compra = await _compraRepository.GetByID(id);
-            var detalleCompra = await _detalleCompraRepository.GetAllByID(id);
-
-            return new CompraDto
-            {
-                IDCompra = compra.IDCompra,
-                Factura = compra.Factura,
-                Fecha = compra.Fecha,
-                MetodoPago = compra.MetodoPago,
-                TotalCompra = compra.TotalCompra,
-                IDUser = compra.IDUser,
-                DetalleCompra = detalleCompra.Select(dt => new DetalleCompraDto
-                {
-                    IDDetalleCompra = dt.IDDetalleCompra,
-                    IDCompra = dt.IDCompra,
-                    IDProducto = dt.IDProducto,
-                    Cantidad = dt.Cantidad,
-                    SubTotal = dt.SubTotal
-                }).ToList()
-            };
+            var compra = await _compraRepository.GetViewFacturaByID(id);
+            return compra;
         }
 
         public async Task<CompraDto> Add(CompraInsertDto dto)
@@ -126,26 +90,8 @@ namespace fakePOSApi.Services
             await _detalleCompraRepository.Save();
             await _kardexRepository.Save();
 
-            var detalleCompraDto = await _detalleCompraRepository.GetAllByID(compra.IDCompra);
-
-            return new CompraDto
-            {
-                IDCompra = compra.IDCompra,
-                Factura = compra.Factura,
-                Fecha = compra.Fecha,
-                MetodoPago = compra.MetodoPago,
-                TotalCompra = compra.TotalCompra,
-                IDUser = compra.IDUser,
-                DetalleCompra = detalleCompraDto.Select(dt => new DetalleCompraDto
-                {
-                    IDDetalleCompra = dt.IDDetalleCompra,
-                    IDCompra = dt.IDCompra,
-                    IDProducto = dt.IDProducto,
-                    Cantidad = dt.Cantidad,
-                    SubTotal = dt.SubTotal
-                }).ToList()
-            };
-
+            var compraDto = await _compraRepository.GetViewFacturaByID(compra.IDCompra);
+            return compraDto;
         }
 
         public async Task<CompraDto> Update(int id, CompraUpdateDto dto)
@@ -159,55 +105,20 @@ namespace fakePOSApi.Services
             _compraRepository.Update(compra);
             await _compraRepository.Save();
 
-            var detalleCompra = await _detalleCompraRepository.GetAllByID(compra.IDCompra);
-
-            return new CompraDto
-            {
-                IDCompra = compra.IDCompra,
-                Factura = compra.Factura,
-                Fecha = compra.Fecha,
-                MetodoPago = compra.MetodoPago,
-                TotalCompra = compra.TotalCompra,
-                IDUser = compra.IDUser,
-                DetalleCompra = detalleCompra.Select(dt => new DetalleCompraDto
-                {
-                    IDDetalleCompra = dt.IDDetalleCompra,
-                    IDCompra = dt.IDCompra,
-                    IDProducto = dt.IDProducto,
-                    Cantidad = dt.Cantidad,
-                    SubTotal = dt.SubTotal
-                }).ToList()
-            };
+            var compraDto = await _compraRepository.GetViewFacturaByID(compra.IDCompra);
+            return compraDto;
         }
 
         public async Task<CompraDto> Delete(int id)
         {
             var compra = await _compraRepository.GetByID(id);
 
-            var detalleCompra = await _detalleCompraRepository.GetAllByID(compra.IDCompra);
-
-            var ventaDto = new CompraDto
-            {
-                IDCompra = compra.IDCompra,
-                Factura = compra.Factura,
-                Fecha = compra.Fecha,
-                MetodoPago = compra.MetodoPago,
-                TotalCompra = compra.TotalCompra,
-                IDUser = compra.IDUser,
-                DetalleCompra = detalleCompra.Select(dt => new DetalleCompraDto
-                {
-                    IDDetalleCompra = dt.IDDetalleCompra,
-                    IDCompra = dt.IDCompra,
-                    IDProducto = dt.IDProducto,
-                    Cantidad = dt.Cantidad,
-                    SubTotal = dt.SubTotal
-                }).ToList()
-            };
+            var compraDto = await _compraRepository.GetViewFacturaByID(compra.IDCompra);
 
             _compraRepository.Delete(compra);
             await _compraRepository.Save();
 
-            return ventaDto;
+            return compraDto;
         }
 
         public Task<IEnumerable<CompraDto>> Search(string search)

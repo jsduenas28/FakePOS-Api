@@ -7,7 +7,7 @@
         public DateOnly Fecha { get; set; }
         public string MetodoPago { get; set; }
         public double TotalCompra { get; set; }
-        public int IDUser { get; set; }
+        public UsuarioDto Usuario { get; set; }
         public List<DetalleCompraDto> DetalleCompra { get; set; }
     }
 }
