@@ -18,7 +18,9 @@ namespace fakePOSApi.Migrations
                     IDCategoria = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CodCategoria = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,7 +37,9 @@ namespace fakePOSApi.Migrations
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,6 +56,8 @@ namespace fakePOSApi.Migrations
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Stock = table.Column<int>(type: "int", nullable: false),
                     Precio = table.Column<double>(type: "float", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IDCategoria = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
