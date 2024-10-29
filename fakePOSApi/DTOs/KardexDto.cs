@@ -9,6 +9,6 @@
         public int Entrada { get; set; }
         public int Salida { get; set; }
         public DateOnly Fecha { get; set; }
-        public int IDUser { get; set; }
+        public UsuarioDto Usuario { get; set; }
     }
 }
