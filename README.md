@@ -1,5 +1,6 @@
 # FakePOS API `ASP.NET Core 8`
 Fake POS (Point of Sale) API simula la funcionabilidad de un punto de venta real.
+
 Swagger Docs [aquí.](https://fakeposapi.azurewebsites.net/swagger/index.html)
 
 Esta API incluye:
