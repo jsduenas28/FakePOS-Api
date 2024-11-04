@@ -1,69 +1,42 @@
 # FakePOS API `ASP.NET Core 8`
-Fake POS (Point of Sale) API simula la funcionabilidad de un punto de venta real.
+FakePOS es una API web desarrollada en ASP.NET, que simula las operaciones de un punto de venta. Este proyecto está diseñado para simplificar y optimizar la gestión de inventario, ventas y compras, ofreciendo funcionalidades clave que permiten a los usuarios realizar un seguimiento detallado de los movimientos de productos.
 
 [README.md in english](./README.en.md)
 
 Swagger Docs [aquí.](https://fakeposapi.azurewebsites.net/swagger/index.html)
 
-Esta API incluye:
+## Caracteristicas
+- **Gestión de Ventas**: Realiza registros de ventas con todos los detalles necesarios, incluyendo el manejo de productos y cantidades.
+- **Gestión de Compras**: Agrega stock a los productos de manera precisa, asegurando que el inventario esté siempre actualizado.
+- **Kardex de Inventario**: Guarda un historial completo de todos los movimientos de stock, proporcionando transparencia y control.
+- **Seguridad Avanzada**: Implementa autenticación con JWT para proteger los endpoints y asegurar que solo usuarios autorizados puedan acceder a ellos.
+- **Documentación Interactiva**: Integración con Swagger para una visualización y prueba de la API de manera sencilla y eficiente.
 
- - Operaciones CRUD en la mayoria de endpoints.
- - Login y Register de usuario.
- - Auth con JWT.
- - Manejo de Stock de productos.
- - Compra, Venta y anulación de ventas.
- - Validación de Stock del producto al realizar una Venta.
- - Registro de movimientos de inventario por producto en Kardex.
+## Requsitos tecnicos
+- **Framework**: .NET 8 o superior
+- **Base de datos**: SQL Server
+- **Entorno de desarrollor**: Visual Studio o Visual Studio Code
 
-# JWT en Swagger
-Muchos de los endpoints requiren de authorization usando un token de JWT, los endpoints `Auth/register` y `Auth/login` no estan protegidos.
+## Instalación y configuración
+para instalar el proyecto en un entorno local
 
-Al hacer login se retornara el token para acceder al resto de endpoints, copia y pega el token en el input con el siguiente formato: `Bearer <token>`
+- Clona el repositorio desde GitHub copiando el siguiente comando:
+ 
+  ```bash
+  git clone https://github.com/jsduenas28/FakePOS-Api.git
+  ```
+- Configura la conexión a la base de datos SQL Server en el archivo `appsettings.json`. Agrega el servidor en `ConnectionString`:
+ 
+  ```csharp
+  "ConnectionStrings": {
+    "StoreConnection": "Server=tuservidor;Database=fakePOSDB;Trusted_Connection=True;TrustServerCertificate=True;"
+  }
+  ```
 
-# Movimientos de inventario
+- Ejecuta la migración InitDB para crear la estructura de la base de datos, esto lo haces en la consola de administración de NuGet usando el siguiente comando:
 
-## Venta:
-    POST: api/Venta
-Este endpoint te permite realizar una nueva venta. La cantidad vendida de cada producto se restara de su Stock.
+  ```bash
+  Update Database
+  ```
 
-Si la cantidad a vender es mayor que el Stock (No hay suficiente producto en stock para realizar la venta), se retornara un status code 400
-
-**Body:**
-```json
-{
-  "factura": "string",
-  "fecha": "yyyy-MM-DD",
-  "metodoPago": "string",
-  "detalleVenta": [
-    {
-      "idProducto": 0,
-      "cantidad": 0
-    }
-  ]
-}
-```
-
-## Anular venta:
-    PUT: api/Venta/anular/{idVenta}
-Este endpoint te permite anular una venta, esto cambia su estado `IsContable` de true a false.
-Si una venta es anulada, el Stock del producto sera regresado.
-
-## Compra:
-
-    POST: api/Compra
-Este endpoint te permite realizar una compra de producto, esto con el fin de agregar nuevo Stock a los productos.
-
-**Body:**
-```json
-{
-  "factura": "string",
-  "fecha": "2024-10-29",
-  "metodoPago": "string",
-  "detalleCompra": [
-    {
-      "idProducto": 0,
-      "cantidad": 0
-    }
-  ]
-}
-```
+- Ejecute el proyecto y acceda a la documentación de Swagger en `/swagger`
